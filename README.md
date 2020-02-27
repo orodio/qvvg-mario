@@ -68,15 +68,21 @@ await pipe(null, [
 
 ### pipes can handle errors
 
-```
-import { pipe, log } from "@qvvg/mario"
+```js
+import {pipe, log} from "@qvvg/mario"
 
 const double = x => x * 2
 const bang = x => {
   throw new Error("EXPLOSION!!!")
 }
 
-const result = await pipe(4, [double, double, bang, log("I will never happen because bang"), double])
+const result = await pipe(4, [
+  double,
+  double,
+  bang,
+  log("I will never happen because bang"),
+  double,
+])
 
 assert(result.value, 16)
 assert(isOk(result), false)
