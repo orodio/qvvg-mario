@@ -4,6 +4,7 @@
   "description": "pipes and stuff",
   "author": "qvvg <github@qv.vg>",
   "license": "MIT",
+  "private": false,
   "homepage": "https://github.com/orodio/qvvg-mario#readme",
   "repository": {
     "type": "git",
