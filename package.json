@@ -1,0 +1,37 @@
+{
+  "name": "@qvvg/mario",
+  "version": "1.0.0",
+  "description": "pipes and stuff",
+  "author": "qvvg <github@qv.vg>",
+  "license": "MIT",
+  "homepage": "https://github.com/orodio/qvvg-mario#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/orodio/qvvg-mario.git"
+  },
+  "bugs": {
+    "url": "https://github.com/orodio/qvvg-mario/issues"
+  },
+  "jest": {
+    "transform": {
+      ".js": "jest-esm-transformer"
+    }
+  },
+
+  "source": "src/mario.js",
+  "main": "dist/mario.js",
+  "module": "dist/mario.mjs",
+  "unpkg": "dist/mario.umd.js",
+
+  "devDependencies": {
+    "jest": "25.1.0",
+    "jest-esm-transformer": "1.0.0",
+    "microbundle": "0.11.0"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "microbundle",
+    "test": "jest",
+    "dev": "jest --watch"
+  }
+}
