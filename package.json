@@ -17,13 +17,12 @@
       ".js": "jest-esm-transformer"
     }
   },
-
   "source": "src/mario.js",
   "main": "dist/mario.js",
   "module": "dist/mario.mjs",
   "unpkg": "dist/mario.umd.js",
-
   "devDependencies": {
+    "serialize-javascript": ">=2.1.1",
     "jest": "25.1.0",
     "jest-esm-transformer": "1.0.0",
     "microbundle": "0.11.0"
