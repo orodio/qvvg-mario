@@ -8,7 +8,7 @@ Because pipes...
 npm install --save @qvvg/mario
 ```
 
-### use pipe as composition
+### use pipe as composition.
 
 ```js
 import {pipe} from "@qvvg/mario"
