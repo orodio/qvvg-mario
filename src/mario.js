@@ -40,11 +40,14 @@ function asSignal(value) {
 }
 
 export async function pipe(signal, fns = []) {
+  if (Array.isArray(signal) && arguments.length === 1)
+    return sig => pipe(sig, signal || [])
   signal = asSignal(await signal)
   if (!fns.length || isNope(signal)) return signal
   const [hd, ...rest] = fns
   try {
-    return hd == null ? pipe(signal, rest) : pipe(await hd(signal.value), rest)
+    const fn = await hd
+    return fn == null ? pipe(signal, rest) : pipe(await fn(signal.value), rest)
   } catch (error) {
     return Nope(signal.value, "pipe::throw", error)
   }

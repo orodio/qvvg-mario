@@ -90,3 +90,18 @@ assert(isNope(result), true)
 assert(result.reason, "pipe::throw")
 assert(result.error.message, "EXPLOSION!!!")
 ```
+
+### pipes can be composed
+
+```js
+import {pipe, Ok} from "@qvvg/mario"
+const add = x => y => Ok(x + y)
+
+const result = await pipe(10, [
+  pipe([add(3), add(-2)]), // +1
+  pipe([add(-9), add(15)]), // +6
+  pipe([add(-5)]), // -5
+])
+
+assert(result.value, 12)
+```

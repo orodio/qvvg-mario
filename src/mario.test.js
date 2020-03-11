@@ -1,4 +1,4 @@
-import {pipe, Ok, Nope, isOk, isNope, tap, __} from "./mario.js"
+import {pipe, Ok, Nope, isOk, isNope, tap, __, log} from "./mario.js"
 it("sync functions", async () => {
   function double(value) {
     return value * 2
@@ -170,4 +170,13 @@ it("pipe can take object", async () => {
   expect(result.error).toBeFalsy()
   expect(result.value).toEqual(pos)
   expect(isOk(result)).toBeTruthy()
+})
+
+it("nested pipes", async () => {
+  const add = x => y => x + y
+  const p1 = pipe([add(5), add(3), add(-3)]) // +5
+  const p2 = pipe([add(-3)]) // -3
+  const p3 = pipe([add(9), add(-4)]) // + 5
+  const result = await pipe(32, [p1, p2, p3])
+  expect(result.value).toBe(39)
 })
