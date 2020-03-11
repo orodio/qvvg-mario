@@ -1,5 +1,4 @@
 import {pipe, Ok, Nope, isOk, isNope, tap, __} from "./mario.js"
-
 it("sync functions", async () => {
   function double(value) {
     return value * 2

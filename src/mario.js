@@ -40,7 +40,7 @@ function asSignal(value) {
 }
 
 export async function pipe(signal, fns = []) {
-  signal = asSignal(signal)
+  signal = asSignal(await signal)
   if (!fns.length || isNope(signal)) return signal
   const [hd, ...rest] = fns
   try {
