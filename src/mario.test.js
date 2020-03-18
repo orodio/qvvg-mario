@@ -1,4 +1,16 @@
-import {pipe, Ok, Nope, isOk, isNope, tap, __, log} from "./mario.js"
+import {
+  pipe,
+  Ok,
+  Nope,
+  isOk,
+  isNope,
+  tap,
+  __,
+  log,
+  getValue,
+  getError,
+  getReason,
+} from "./mario.js"
 it("sync functions", async () => {
   function double(value) {
     return value * 2
@@ -10,15 +22,15 @@ it("sync functions", async () => {
 
   const result = await pipe(4, [double, triple])
   // results have a value
-  expect(result.value).toBe(24)
+  expect(getValue(result)).toBe(24)
 
   // result is an ok signal
   expect(isOk(result)).toBeTruthy()
   expect(isNope(result)).toBeFalsy()
 
   // ok signals dont have reasons or errors
-  expect(result.error).toBe(null)
-  expect(result.reason).toBe(null)
+  expect(getError(result)).toBe(null)
+  expect(getReason(result)).toBe(null)
 })
 
 it("async functions", async () => {
@@ -31,7 +43,7 @@ it("async functions", async () => {
   }
 
   const result = await pipe(4, [double, triple])
-  expect(result.value).toBe(24)
+  expect(getValue(result)).toBe(24)
   expect(isOk(result)).toBeTruthy()
 })
 
@@ -47,16 +59,16 @@ it("values can be bad bad not good", async () => {
   }
 
   const result = await pipe(4, [double, maybeTriple])
-  expect(result.value).toBe(8)
+  expect(getValue(result)).toBe(8)
 
   // result is a nope signal
   expect(isNope(result)).toBeTruthy()
   expect(isOk(result)).toBeFalsy()
 
   // nope signals have a reason
-  expect(result.reason).toBe("8 is a bad number, shame :bell:")
+  expect(getReason(result)).toBe("8 is a bad number, shame :bell:")
   // not all nope signals have an error though
-  expect(result.error).toBeFalsy()
+  expect(getError(result)).toBeFalsy()
 })
 
 it("things can go really bad", async () => {
@@ -69,13 +81,13 @@ it("things can go really bad", async () => {
   }
 
   const result = await pipe(4, [double, explosion])
-  expect(result.value).toBe(8)
+  expect(getValue(result)).toBe(8)
   expect(isNope(result)).toBeTruthy()
 
   // thrown errors are set as error and receive a reason
-  expect(result.reason).toBe("pipe::throw")
-  expect(result.error.message).toBe("EXPLOSION!!!")
-  expect(result.error.stack).toBeTruthy()
+  expect(getReason(result)).toBe("pipe::throw")
+  expect(getError(result).message).toBe("EXPLOSION!!!")
+  expect(getError(result).stack).toBeTruthy()
 })
 
 it("bad pipes dont complete", async () => {
@@ -89,8 +101,8 @@ it("bad pipes dont complete", async () => {
 
   const result = await pipe(4, [double, sadlyNo, double, double, double])
   // pipe should stop at sadlyNo and not double the value 3 more times
-  expect(result.value).not.toBe(64)
-  expect(result.value).toBe(8)
+  expect(getValue(result)).not.toBe(64)
+  expect(getValue(result)).toBe(8)
   expect(isNope(result)).toBeTruthy()
   expect(result.reason).toBe("I BLOCK YOU!!")
 })
@@ -117,8 +129,8 @@ it("tap is for sideeffects", async () => {
     double,
   ])
 
-  expect(result.error).toBeFalsy()
-  expect(result.value).toBe(64)
+  expect(getError(result)).toBeFalsy()
+  expect(getValue(result)).toBe(64)
 
   // tap(x => a(x))
   expect(a).toHaveBeenCalledTimes(1)
@@ -157,8 +169,8 @@ it("__ is for partial application", async () => {
     __(transform, 6, -9),
   ])
 
-  expect(result.error).toBeFalsy()
-  expect(result.value).toEqual([5, -3])
+  expect(getError(result)).toBeFalsy()
+  expect(getValue(result)).toEqual([5, -3])
   expect(isOk(result)).toBeTruthy()
 })
 
@@ -167,8 +179,8 @@ it("pipe can take object", async () => {
 
   const result = await pipe(pos)
 
-  expect(result.error).toBeFalsy()
-  expect(result.value).toEqual(pos)
+  expect(getError(result)).toBeFalsy()
+  expect(getValue(result)).toEqual(pos)
   expect(isOk(result)).toBeTruthy()
 })
 
@@ -178,5 +190,5 @@ it("nested pipes", async () => {
   const p2 = pipe([add(-3)]) // -3
   const p3 = pipe([add(9), add(-4)]) // + 5
   const result = await pipe(32, [p1, p2, p3])
-  expect(result.value).toBe(39)
+  expect(getValue(result)).toBe(39)
 })

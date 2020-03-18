@@ -4,11 +4,11 @@ export const OK /*   */ = 0b01
 export const NOPE /* */ = 0b10
 
 export function isOk(signal) {
-  return signal.____ & OK
+  return Boolean(signal.____ & OK)
 }
 
 export function isNope(signal) {
-  return signal.____ & NOPE
+  return Boolean(signal.____ & NOPE)
 }
 
 export function Ok(value) {
@@ -76,4 +76,16 @@ export function __(fn = ident, ...args) {
   return function __Act(value) {
     return fn(value, ...args)
   }
+}
+
+export function getReason(signal) {
+  return isSignal(signal) ? signal.reason : null
+}
+
+export function getError(signal) {
+  return isSignal(signal) ? signal.error : null
+}
+
+export function getValue(signal) {
+  return isSignal(signal) ? signal.value : signal
 }
